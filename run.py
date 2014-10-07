@@ -1,4 +1,4 @@
 __author__ = 'Beryl'
-from microblog import app
+from __init__ import app
 
 app.run(debug=True)
