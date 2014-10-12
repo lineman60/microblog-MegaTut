@@ -1,4 +1,4 @@
 __author__ = 'Beryl'
-from __init__ import app
+from app import app
 
 app.run(debug=True)

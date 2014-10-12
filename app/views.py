@@ -1,20 +1,23 @@
 __author__ = 'Beryl'
 from flask import render_template, flash, redirect, session, url_for, request, g
-from flask.ext.login import login_user, logout_user, login_required
-from __init__ import app, db, lm, oid
-from forms import LoginForm
-from models import User, ROLE_USER, ROLE_ADMIN
+from flask.ext.login import login_user, logout_user, current_user, login_required
+from app import app, db, lm, oid
+from .forms import LoginForm
+from .models import User  #, ROLE_USER, ROLE_ADMIN
 
 
-@lm.user_load
+
+@lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
+
 @app.route('/')
 @app.route('/index')
+@login_required
 def index():
     #passes vars to template
-    user = {'nickname': 'Bob'}
+    user = g.user
     posts = [ #arry of fake posts
         {
             'author': {'nickname': 'Johnny'},
@@ -59,3 +62,12 @@ def after_login(resp):
         session.pop('remember_me', None)
     login_user(user, remember=remember_me)
     return redirect(request.args.get('next' or url_for('index')))
+
+@app.before_request
+def before_request():
+    g.user = current_user
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
