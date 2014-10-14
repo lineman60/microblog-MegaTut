@@ -34,6 +34,7 @@ if not app.debug:
     from logging.handlers import RotatingFileHandler
     file_handler = RotatingFileHandler('tmp/microblog.log', 'a', 1 * 1024 * 1024, 3)
     file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s :%(lineno)d]'))
-    app.logger.SetLevel(logging.INFO)
+    app.logger.setLevel(logging.INFO)
+    file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
     app.logger.info('App Startup')
