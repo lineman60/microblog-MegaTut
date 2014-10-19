@@ -19,12 +19,16 @@
             </i>
         </p>
         {% endif %}
+        <p> {{user.followers.count()}} followers |</p>
         {% if user.id == g.user.id %}
             <p>
-                <a href="{{ url_for('edit') }}">Edit
-                </a>
-        </p>
+                <a href="{{ url_for('edit') }}">Edit  </a>
+                {% elif not g.user.is_following(user) %}
+                <a href="{{ url_for('follow', nickname=urser.nickname) }}">Follow</a>
+              {% else %}
+            <a href="{{ url_for('unfollow', nickname=user.nickname) }}">Unfollow</a>
         {% endif %}
+        </p>
         </td>
     </tr>
     </table>
