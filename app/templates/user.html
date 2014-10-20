@@ -24,7 +24,7 @@
             <p>
                 <a href="{{ url_for('edit') }}">Edit  </a>
                 {% elif not g.user.is_following(user) %}
-                <a href="{{ url_for('follow', nickname=urser.nickname) }}">Follow</a>
+                <a href="{{ url_for('follow', nickname=user.nickname) }}">Follow</a>
               {% else %}
             <a href="{{ url_for('unfollow', nickname=user.nickname) }}">Unfollow</a>
         {% endif %}
