@@ -28,3 +28,7 @@ class EditForm(Form):
             self.nickname.errors.append('Users exists Please chose another name')
             return False
         return True
+
+
+class PostForm(Form):
+    post = StringField('post', validators=[DataRequired()])

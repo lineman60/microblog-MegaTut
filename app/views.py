@@ -2,8 +2,8 @@ __author__ = 'Beryl'
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid
-from .forms import LoginForm, EditForm
-from .models import User  #, ROLE_USER, ROLE_ADMIN
+from .forms import LoginForm, EditForm, PostForm
+from .models import User, Post  #, ROLE_USER, ROLE_ADMIN
 from datetime import datetime
 
 
@@ -13,22 +13,20 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET','POST'])
+@app.route('/index', methods=['GET','POST'])
 @login_required
 def index():
     #passes vars to template
-    user = g.user
-    posts = [ #arry of fake posts
-        {
-            'author': {'nickname': 'Johnny'},
-            'body': 'beautiful day in Portland!'
-        },
-        {
-            'author': {'nickname': 'Susan'},
-            'body': 'the Avengers movie was so cool!'
-        }
-    ]
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(body=form.post.data, timestamp=datetime.utcnow(), author=g.user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your Post is now Live!')
+        return  redirect(url_for('index'))
+#    user = g.user
+    posts = g.user.followed_posts().all()
     return render_template('index.html', title='home', user=user, posts=posts)
 
 
