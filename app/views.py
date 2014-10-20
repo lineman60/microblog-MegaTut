@@ -5,7 +5,7 @@ from app import app, db, lm, oid
 from .forms import LoginForm, EditForm, PostForm
 from .models import User, Post  #, ROLE_USER, ROLE_ADMIN
 from datetime import datetime
-
+from config import POSTS_PER_PAGE
 
 
 @lm.user_loader
@@ -13,10 +13,11 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-@app.route('/', methods=['GET','POST'])
-@app.route('/index', methods=['GET','POST'])
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
+@app.route('/index/<int:page>', methods=['GET', 'POST'])
 @login_required
-def index():
+def index(page=1):
     #passes vars to template
     form = PostForm()
     if form.validate_on_submit():
@@ -26,7 +27,7 @@ def index():
         flash('Your Post is now Live!')
         return  redirect(url_for('index'))
 #    user = g.user
-    posts = g.user.followed_posts().all()
+    posts = g.user.followed_posts().pageinate(page, POSTS_PER_PAGE, False).items
     return render_template('index.html', title='home', user=user, posts=posts)
 
 
