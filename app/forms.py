@@ -35,4 +35,4 @@ class PostForm(Form):
 
 
 class SearchForm(Form):
-    seach = StringField('seach', validators=[DataRequired()])
+    search = StringField('search', validators=[DataRequired()])
