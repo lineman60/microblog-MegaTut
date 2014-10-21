@@ -16,6 +16,8 @@ lm.login_view = 'login'
 oid = OpenID(app, os.path.join(basedir, 'tmp'))
 
 from app import views, models
+from momentjs import momentjs
+app.jinja_env.globals['momentjs'] = momentjs
 
 from config import basedir, ADMINS, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD
 

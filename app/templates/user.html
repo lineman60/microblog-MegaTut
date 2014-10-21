@@ -14,9 +14,9 @@
             {% endif %}
         {% if user.last_seen %}
         <p>
-            <i>
-                Last Seen on: {{ user.last_seen }}
-            </i>
+            <em>
+                Last Seen on: {{ momentjs(user.last_seen).calendar() }}
+            </em>
         </p>
         {% endif %}
         <p> {{user.followers.count()}} followers |</p>
